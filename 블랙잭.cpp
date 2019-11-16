@@ -21,11 +21,14 @@ int pullCard(void); //get one card from the tray
 int getCardNum(int cardnum);
 void printCard(int cardnum);
 int betDollar(void);
-void printCardInitialStatus(void); //여기까지함 
+void printCardInitialStatus(void); 
 
-int getAction();
-void printUserCardStatus(int user, int cardcnt);
-int calcStepResult();
+int my_turn();
+int player_turn(int player);
+int dealer_turn();
+
+void printUserCardStatus(int user, int cardcnt); 
+int calcStepResult(int user, int cardcnt);
 int checkResult();
 int checkWinner();
 
@@ -44,10 +47,36 @@ int main(int argc, char *argv[]) {
 	offerCards();
 	
 	printCardInitialStatus();
-	printf("\n------------------ GAME start --------------------------\n");
 	
-	printf("\n >>> my turn !---------\n");
-	getAction();
+	if (calcStepResult(0,2)==21)
+	{
+		printf("BLACKJACK!\n");
+	}
+	
+	else 
+	{	
+		my_turn();
+	}
+
+	int player=1;
+	
+	for (player=1;player<n_user;player++){
+		
+		if(calcStepResult(player,2)==21)
+		{	
+			printf("BLACKJACK!\n");
+		}
+		else
+		
+		player_turn(player);
+		
+	}
+	
+	dealer_turn();
+	
+	
+	
+	
 	
 	return 0;
 }
@@ -183,17 +212,8 @@ int getCardNum(int cardnum) {
 	int value;
 	switch (cardnum%13){
 		
-		int A;
 		case 1:
-		printf("\n A의 값을 1로 하시겠어요 11로 하시겠어요?\n");
-		scanf("%d",&A);
-		
-		if (A==1)
-		value=1;
-		else if (A==11)
 		value=11;
-		else ("\n 1과 11중 하나만 고르세요\n");
-		
 		break;
 		
 		case 2:
@@ -311,68 +331,196 @@ void printCardInitialStatus(void) {
 			printf("->player %d\n",i);
 			printCard(cardhold[i][0]);
 			printCard(cardhold[i][1]);
+			printf("->player %d cardsum : %d\n",i,calcStepResult(i,2));
 			printf("\n");
 		}
-		
 		printf("\n---server  :  X ");
 		printCard(cardhold[n_user][1]);		
 			
+	 
+}
+
+
+int calcStepResult(int user, int cardcnt){
+		
+	int cardSum[N_MAX_USER];
 	
+	int i,sum=0;
+	
+	  for  (i=0;i<cardcnt;i++){
+	
+	 sum+=getCardNum(cardhold[user][i]); //일단 A는 1로 고정  
+	}
+	cardSum[user]=sum;
+	
+	 return cardSum[user];
+	 	
 }
 
 //>>> my turn! -------------
    // card : DIA10 HRTJack       ::: Action? (0 - go, 1 - stay) :
    	
-int getAction(void){
-	int cardcnt=2;
+int my_turn(void){ 
+
+	printf("-------my turn!-------\n");
+	
 	int i=0;
+	int cardcnt=2;
+	
 	for (i=0; i<8; i++)
 	{
 		int action;
-		printf("Hit or Stay? 1-Hit 0-Stay\n");
+		
+		printf("Want more cards? GO=1, STAY=0\n");
 		
 		do{
-		scanf("%d",&action);
-		} while (action!=1 &&action!=0);
+			scanf("%d",&action);
+		} while (action!=1 && action!=0);
 		
+	
 		if (action==1)
 		{
-			printf("\n you've got another card \n");
-			cardhold[0][i+2]=pullCard();
+			printf("You've got another card now.\n");
+			cardhold[0][i+2]==pullCard();
 			cardcnt++;
-		
 			printUserCardStatus(0,cardcnt);
-		} 
+		
 			
+			if (calcStepResult(0,cardcnt) > 21)
+			{
+				printf("Sum of player's cards now:%d\n\n",calcStepResult(0,cardcnt));
+				printf("BURST!\n");
+				return 0;
+			}
+			else if (calcStepResult(0,cardcnt) == 21)
+			{
+				printf("Sum of player's cards now:%d\n\n",calcStepResult(0,cardcnt));
+				printf("Player win!\n");
+				return 1;
+			}		
+			else printf("Sum of player's cards now:%d\n\n",calcStepResult(0,cardcnt));
+			break;
+		}
+		else 
+		{
+			printf("Sum of player's cards now:%d\n\n",calcStepResult(0,cardcnt));
+			return calcStepResult(0,cardcnt);
+		}
+	}
+}
+	
+int player_turn(int player){
+	
+	
+	printf("\n-----player%d turn!------\n",player);
+	
+	int i=0;
+	int cardcnt=2;
+	
+	for (i=0; i<8; i++)
+	{
+	
+		if (calcStepResult(player,cardcnt)<17)
+		{
 			
- 	else if (action==0){
-	printf("You choose Stay\n");
-	break;}
-  }  
- 
-  
+			cardhold[player][i+2]==pullCard();
+			cardcnt++;
+			printUserCardStatus(player,cardcnt);
+		
+			
+		 if (calcStepResult(player,cardcnt) > 21)
+			{
+				printf("Sum of player %d's cards now:%d\n\n",player,calcStepResult(player,cardcnt));
+				printf("BURST!\n");
+				return 0;
+			}
+			else if (calcStepResult(player,cardcnt) == 21)
+			{
+				printf("Sum of player %d's cards now:%d\n\n",player,calcStepResult(player,cardcnt));
+				printf("Player %d win!\n",player);
+				return 1 ;
+			}	
+			
+			else 
+		
+			printf("Sum of player %d's cards now:%d\n\n",player,calcStepResult(player,cardcnt));
+			printf("STAY!\n");
+			break;
+			
+	}
+		else if (calcStepResult(player,cardcnt)>=17) //action==0
+		{	
+			printUserCardStatus(player,cardcnt);
+			printf("Sum of player %d's cards now:%d\n\n",player,calcStepResult(player,cardcnt));
+			printf("STAY!\n");
+			return calcStepResult(player,cardcnt);
+		}
+}
 	
 }
-//해야할것 _  5명 이상 안받기, 2판 이상부터할떄 자본금, 중복없이 카드분배?  
-
-void printUserCardStatus(int user, int cardcnt) {
+void printUserCardStatus(int user, int cardcnt) { //처음 2장 받을때? 
 
 	int i;
 	
-	printf("   -> card : ");
+	printf(" \n-> card : \n");
 	for (i=0;i<cardcnt;i++)
 		printCard(cardhold[user][i]);
 	printf("\t ::: ");
 }
 
+//cardhold[n_user][0];
 
-
-
-
-
-
-
-
+int dealer_turn(){
+	
+	printf("-------Dealer Turn!-------\n");
+	
+	int i=0;
+	int cardcnt=2;
+	
+	for (i=0; i<8; i++)
+	{
+	
+		if (calcStepResult(n_user,cardcnt)<17)
+		{
+			
+			cardhold[n_user][i+2]==pullCard();
+			cardcnt++;
+			printUserCardStatus(n_user,cardcnt);
+		
+			
+		 if (calcStepResult(n_user,cardcnt) > 21)
+			{	
+				calcStepResult(n_user,cardcnt);
+				printf("dealer lose!\n");
+				return 0;
+			}
+			else if (calcStepResult(n_user,cardcnt) == 21)
+			{
+				calcStepResult(n_user,cardcnt);
+				return 1 ;
+			}	
+			
+			else 
+		
+			printf("Sum of Dealer's cards now:%d\n\n",calcStepResult(n_user,cardcnt));
+			printf("STAY!\n");
+			break;
+			
+	}
+		else if (calcStepResult(n_user,cardcnt)>=17) //action==0
+		{	
+			printUserCardStatus(n_user,cardcnt);
+			printf("Sum of dealer's cards now:%d\n\n",calcStepResult(n_user,cardcnt));
+			return calcStepResult(n_user,cardcnt);
+		}
+}
+	
+}
+	
+	
+	
+	
+	
 
 
 
