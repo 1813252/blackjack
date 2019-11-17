@@ -14,6 +14,8 @@ int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD]; //여기까지함
 int cardSum[N_MAX_USER];					//sum of the cards
 int gameEnd = 0;
 int cardcnt;
+int round=1;
+
 void offerCards(void);
 int configUser(void);
 int mixCardTray(void);
@@ -28,13 +30,14 @@ int player_turn(int player);
 
 void printUserCardStatus(int user, int cardcnt); 
 int calcStepResult(int user, int cardcnt);
-
+void play();
 int checkWinner();
 void printCardInitialStatus();
 	
-int main(int argc, char *argv[]) {
+int main(void) {
 		
 	int i;
+	int sel;
 	
 	srand((unsigned)time(NULL));
 	
@@ -42,7 +45,32 @@ int main(int argc, char *argv[]) {
 		
 	mixCardTray();
 	
+	play();
 
+	
+	printf("Do you want to play game again?  1-Yes 0-NO\n");
+	
+	do
+	{
+	   scanf("%d",&sel);
+	
+	} while (sel!=0 && sel!=1);
+
+	
+	if (sel==1)
+  	{	
+  		round++;
+		printf("\n__________ROUND %d___________ \n\n",round);
+		main();
+	}
+	
+	return 0;
+}
+
+
+
+void play(){
+	
 	betDollar();
 	offerCards();
 	
@@ -151,9 +179,7 @@ int main(int argc, char *argv[]) {
 		    printf("(Sum : %d)",player_sum[player]);
 		}
 	}
-	return 0;
 }
-
 int pullCard(void){ //카드 한장씩 꺼내기 
 //cardtray[0],cardtray[1]..순서대로 출력  
 	
@@ -204,38 +230,38 @@ void printCard(int cardnum) {
 	
 	{	
 		if (cardnum%13==1)
-		printf("Hart%s","A");
+		printf(" Hart%s","A");
 		
 		else if (2<=cardnum%13 && cardnum%13<=10)//2~10
-		printf("Hart%d",cardnum%13);
+		printf(" Hart%d",cardnum%13);
 		
 		else if (cardnum%13==11) 
-		printf("Hart%s","J");
+		printf(" Hart%s","J");
 		
 		else if (cardnum%13==12)
-		printf("Hart%s","Q");
+		printf(" Hart%s","Q");
 	
 		else 
-		printf("Hart%s","K");		
+		printf(" Hart%s","K");		
 	
 	}		
 	
 	if (cardnum/13==1)
 	{
 		if (cardnum%13==1)
-		printf("Dia%s","A");
+		printf(" Dia%s","A");
 		
 		else if (2<=cardnum%13 && cardnum%13<=10)
-		printf("Dia%d",cardnum%13);
+		printf(" Dia%d",cardnum%13);
 		
 		else if (cardnum%13==11) 
-		printf("Dia%s","J");
-		
+		printf(" Dia%s","J");
+		 
 		else if (cardnum%13==12)
-		printf("Dia%s","Q");
+		printf(" Dia%s","Q");
 	
 		else 
-		printf("Dia%s","K");		
+		printf(" Dia%s","K");		
 		
 	}
 	
@@ -243,37 +269,37 @@ void printCard(int cardnum) {
 	{
 		
 		if (cardnum%13==1)
-		printf("Spade%s","A");
+		printf(" Spade%s","A");
 		
 		else if (2<=cardnum%13 && cardnum%13<=10)
-		printf("Spade%d",cardnum%13);
+		printf(" Spade%d",cardnum%13);
 		
 		else if (cardnum%13==11) 
-		printf("Spade%s","J");
+		printf(" Spade%s","J");
 		
 		else if (cardnum%13==12)
-		printf("Spade%s","Q");
+		printf(" Spade%s","Q");
 	
 		else 
-		printf("Spade%s","K");
+		printf(" Spade%s","K");
 	}
 	
 	if (cardnum/13==3)
 	{
 		if (cardnum%13==1)
-		printf("Club%s","A");
+		printf(" Club%s","A");
 			
 		else if(2<=cardnum%13 && cardnum%13<=10)
-		printf("Club%d",cardnum%13);
+		printf(" Club%d",cardnum%13);
 		
 		else if (cardnum%13==11) 
-		printf("Club%s","J");
+		printf(" Club%s","J");
 		
 		else if (cardnum%13==12)
-		printf("Club%s","Q");
+		printf(" Club%s","Q");
 	
 		else 
-		printf("Club%s\n","K");
+		printf(" Club%s\n","K");
 	}
 	
 	
