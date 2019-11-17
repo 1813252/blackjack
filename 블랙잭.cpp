@@ -7,12 +7,11 @@
 
 int CardTray[N_CARDSET*52];
 int n_user;	
-int dollar[N_MAX_USER];	//dollars that each player has dollar[0]_나,dollar[1],dollar[2]...
+int dollar[N_MAX_USER];
 int bet[N_MAX_USER];
-int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD]; //여기까지함 
-
-int cardSum[N_MAX_USER];					//sum of the cards
-int gameEnd = 0;
+int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD]; 
+int cardSum[N_MAX_USER];
+int gameEnd=1 ;
 int cardcnt;
 int round=1;
 
@@ -33,7 +32,7 @@ int calcStepResult(int user, int cardcnt);
 void play();
 int checkWinner();
 void printCardInitialStatus();
-	
+
 int main(void) {
 		
 	int i;
@@ -45,32 +44,37 @@ int main(void) {
 		
 	mixCardTray();
 	
-	play();
-
-	
-	printf("Do you want to play game again?  1-Yes 0-NO\n");
-	
-	do
-	{
-	   scanf("%d",&sel);
-	
-	} while (sel!=0 && sel!=1);
-
-	
-	if (sel==1)
-  	{	
-  		round++;
-		printf("\n__________ROUND %d___________ \n\n",round);
-		main();
+	for (i=0;i<n_user;i++)
+	{		
+		dollar[i]=50;
 	}
+	
+	int gameEnd=1;
+	
+
+	do{
+	
+	play();
+	
+		
+	for (i=0;i<n_user;i++)
+	{
+		gameEnd*=dollar[i];
+	}
+	
+	round++;
+	
+	} while (gameEnd!=0);
 	
 	return 0;
 }
 
 
 
+
 void play(){
 	
+	printf("\n--------------------\n-------------Round %d------------------\n------",round);
 	betDollar();
 	offerCards();
 	
@@ -94,6 +98,7 @@ void play(){
 	
 		player_sum[player]=player_turn(player);
 
+	
 	}
 	
 
@@ -101,82 +106,110 @@ void play(){
 	
 	dealer_sum = dealer_turn();
 	
+	
 	//result 
-	printf("\n______________Round Result________________\n");
+	printf("\n______________Round %d Result________________\n",round);
+	
+	
 	
 	printf("\n---->Your result :   ");
 	if (calcStepResult(0,2)==21)
 	{
 		printf("BLACK JACK WIN!");
+		dollar[0]+=2*bet[0];
+		printf("----->$%d",dollar[0]);
 	}
 	else if (my_sum==21)
 	{	
 		printf("You Win!\n");
 		printf("(Sum : 21)");
+		dollar[0]+=bet[0];
+		printf("----->$%d",dollar[0]);
 	}
 
 	else if(my_sum>21)
 		{
 			printf("You Lose!");
 			printf("(Sum : %d)",my_sum);
+			dollar[0]-=bet[0];
+			printf("----->$%d",dollar[0]);
 		}
 		
 		else if (dealer_sum>21)//burst가 아니고 blackjack도 아닌경우  
 		{
 			printf("You Win!"); 
 			printf("(Sum : %d)",my_sum);
+			dollar[0]+=bet[0];
+			printf("------->%d",dollar[0]);
 		}
 		
 		else if (my_sum<21 && dealer_sum>my_sum)
 		{
 			printf("You Lose!");
+			dollar[0]-=bet[0];
 			printf("(Sum : %d)",my_sum);
+			printf("------->%d",dollar[0]);
 		}
 			
 		else
-	   	{    printf("You Win!");
+	   	{   printf("You Win!");
 			printf("(Sum : %d)",my_sum);
+			dollar[0]+=bet[0];
+			printf("----->$%d",dollar[0]);
 		}
 			
 	
-
+	
 
 	for (player=1;player<n_user;player++){
 		
 	printf("\n---->player %d result : ",player);
-	
+		
 	if (calcStepResult(player,2)==21)
 	{
 		printf("BLACK JACK WIN!");
+		dollar[player]+=2*bet[player];
+		printf("----->$%d",dollar[player]);
+		
 	}
 	else if (player_sum[player]==21)
 	{	
 		printf(" Win!");
 		printf("(Sum : 21)");
+		dollar[player]+=bet[player];
+		printf("----->$%d",dollar[player]);
 	}
 
 	else if(player_sum[player]>21)
 		{
 			printf(" Lose!");
 			printf("(Sum : %d)",player_sum[player]);
+			dollar[player]-=bet[player];
+			printf("----->$%d",dollar[player]);
 		}
 		
 		else if (dealer_sum>21)//burst가 아니고 blackjack도 아닌경우  
 		{
 			printf(" Win!"); 
 			printf("(Sum : %d)",player_sum[player]);
+			dollar[player]+=bet[player];
+			printf("----->$%d",dollar[player]);
 		}
 		
 		else if ( dealer_sum>player_sum[player])
 		{
 			printf(" Lose!");
 			printf("(Sum : %d)",player_sum[player]);
+			dollar[player]-=bet[player];
+			printf("----->$%d",dollar[0]);
 		}
 			
 		else
 	   	{ 
 		    printf(" Win!");
 		    printf("(Sum : %d)",player_sum[player]);
+		   	dollar[player]+=bet[player];
+		   	printf("----->$%d",dollar[player]);
 		}
 	}
 }
@@ -377,23 +410,22 @@ int configUser(void){
 }
 
 int betDollar(void){
-		
-	int bet[N_MAX_USER]; //6칸 배열 배당 
-	
 	
 	printf("\n");	
 	printf(" ------- BETTING STEP -------- ");
-	
-	printf("your betting : ");
+	printf("Your betting : ");
 	scanf("%d",&bet[0]);
+	printf("You bets $%d (out of $%d)\n",bet[0],dollar[0]);
 	int i;
 	
 	for (i=1;i<n_user;i++)
 	{
-		bet[i]= rand()%50;
-		printf("player %d bets $%d (out of $50)\n",i,bet[i]);
+		bet[i]= (rand()%dollar[i])+1;
+		printf("player %d bets $%d (out of $%d)\n",i,bet[i],dollar[i]);
 			
 	}
+	
+	return bet[n_user],dollar[n_user];
 	
 }
 
@@ -448,7 +480,7 @@ int calcStepResult(int user, int cardcnt){
 	
 	  for  (i=0;i<cardcnt;i++){
 	
-	 sum+=getCardNum(cardhold[user][i]); //일단 A는 1로 고정  
+	 sum+=getCardNum(cardhold[user][i]); //일단 A는 11로 고정  
 	}
 	cardSum[user]=sum;
 	
@@ -624,10 +656,6 @@ int dealer_turn(){
 	}
   }
 }
-
-
-
-
 
 void printUserCardStatus(int user, int cardcnt) { //처음 2장 받을때? 
 
