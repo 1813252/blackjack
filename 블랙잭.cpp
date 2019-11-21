@@ -45,8 +45,7 @@ int main(void) {
 	configUser();
 		
 	mixCardTray();
-	
-	
+		
 	for (i=0;i<n_user;i++)
 	{		
 		dollar[i]=50;
@@ -234,11 +233,11 @@ int pullCard(void){ //카드 한장씩 꺼내기
 	
 	j++;	
 		
-	if (j<N_CARDSET*52)
+	if (j<=N_CARDSET*52)
 	
 	return CardTray[j];
 	
-	else if (j>=N_CARDSET*52)
+	else if (j>N_CARDSET*52)
 	
 	return 0;
 		
@@ -304,7 +303,7 @@ void printCard(int cardnum) {  //카드 프린트
 		else if (cardnum%13==12)
 		printf(" Hart%s","Q");
 	
-		else 
+		else if (cardnum%13)
 		printf(" Hart%s","K");		
 	
 	}		
@@ -362,36 +361,51 @@ void printCard(int cardnum) {  //카드 프린트
 		printf(" Club%s","Q");
 	
 		else 
-		printf(" Club%s\n","K");
+		printf(" Club%s","K");
 	}
 
-	
-	
+
 }
 
+
+int calcStepResult(int user, int cardcnt){ //가지고 있는 카드의 합을 계산함  
+		
+	int cardSum[N_MAX_USER];
 	
+	int i,sum=0;
+	
+	  for  (i=0;i<cardcnt;i++){
+	
+	 sum+=getCardNum(cardhold[user][i]); //일단 A는 11로 고정  
+	}
+	cardSum[user]=sum;
+	
+	 return cardSum[user]; 
+	 	
+}
+
+
 int getCardNum(int cardnum) {
 		
 	int value;
-	int i=0;
-	int choice;
+	int i;
 	
 	switch (cardnum%13){
 		
 		case 1:
+
+		for (i=0;i<n_user;i++)
+		{
 			
-		for (i=0;i<n_user;i++){
+		if (calcStepResult(i,cardcnt-1)+11>21)
 		
-		if(calcStepResult(i,cardcnt)<=21)
-		{
-	    	value=11;
-		}
+		value=1;
 		
-		else 
-		{
-			value=1;	
-		}
-	}
+		else
+		value=11;
+		
+		}		
+			
 		break;
 		
 		case 2:
@@ -449,8 +463,10 @@ int getCardNum(int cardnum) {
 
 int configUser(void){
 	
-	do{
 	printf("input the number of player (MAX5):  ");
+		
+	do{
+	
 	scanf("%d",&n_user);
 	
 	} while(n_user>5); //5보다 큰 경우 n_user값을 다시 받음  
@@ -463,7 +479,13 @@ int betDollar(void){
 	printf("\n");	
 	printf(" ------- BETTING STEP -------- ");
 	printf("Your betting : ");
+	
+	do {
+		
 	scanf("%d",&bet[0]);
+
+	}while(bet[0]>dollar[0]); //가진돈보다 적게 배팅할 수 있음// 
+		
 	printf("You bets $%d (out of $%d)\n",bet[0],dollar[0]);
 	int i;
 	
@@ -521,22 +543,6 @@ void printCardInitialStatus(void) { //처음 받은 카드 2개만 프린트
 }
 
 
-int calcStepResult(int user, int cardcnt){ //가지고 있는 카드의 합을 계산함  
-		
-	int cardSum[N_MAX_USER];
-	
-	int i,sum=0;
-	
-	  for  (i=0;i<cardcnt;i++){
-	
-	 sum+=getCardNum(cardhold[user][i]); //일단 A는 11로 고정  
-	}
-	cardSum[user]=sum;
-	
-	 return cardSum[user]; 
-	 	
-}
-
 
 int my_turn(void){ 
 
@@ -570,8 +576,7 @@ int my_turn(void){
 			printf("GO!\n");  
 			cardhold[0][i+2]=pullCard();
 			cardcnt++; //pullCard할때마다 카드수가 더해짐  
-			printUserCardStatus(0,cardcnt); //출력계속함  
-		
+			printUserCardStatus(0,cardcnt); //출력계속함
 			
 			if (calcStepResult(0,cardcnt) > 21) 
 			{
@@ -658,7 +663,7 @@ int dealer_turn(){ //플레이어 턴과 똑같음
 	int cardcnt=2;
 	
 	printf("-------Dealer Turn!-------\n");
-	printUserCardStatus(n_user,cardcnt);
+	printUserCardStatus(n_user,2);
 	
 	
 	if (calcStepResult(n_user,2)==21)
@@ -677,6 +682,7 @@ int dealer_turn(){ //플레이어 턴과 똑같음
 			printf("GO!\n");
 			cardhold[n_user][i+2]=pullCard();
 			cardcnt++;
+		
 		
 		 if (calcStepResult(n_user,cardcnt) > 21)
 			{
