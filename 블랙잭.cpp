@@ -3,9 +3,10 @@
 #include <time.h> 
 #define N_CARDSET 1
 #define N_MAX_CARDNUM		13
-#define N_MAX_USER			5
+#define N_MAX_USER		5
 #define N_MAX_CARDHOLD		10
 
+//githubì—ì„œ exeë¥¼ ë‹¤ìš´ë°›ì•„ ì‹¤í–‰ì‹œí‚¤ëŠ” ê²½ìš° goí• ê²½ìš° í”„ë¡œê·¸ë¨ì´ ë‹«í˜€ë²„ë¦½ë‹ˆë‹¤ã…œã…œì œ ì»´í“¨í„°ì— ë§Œë“¤ì–´ì§„ exeíŒŒì¼ì„ ì‹¤í–‰ì‹œí‚¬ë• ì•ˆê·¸ëŸ¬ëŠ”ë°ã…œã…œ
 
 int CardTray[N_CARDSET*52];
 int n_user;	
@@ -50,7 +51,7 @@ int main(void) {
 	{		
 		dollar[i]=50;
 	}  
-	//ÃÊ±â ÀÚº»Àº ¸ğµÎ 50$À¸·Î ½ÃÀÛ 
+	//ì´ˆê¸° ìë³¸ì€ ëª¨ë‘ 50$ìœ¼ë¡œ ì‹œì‘ 
 	 
 	int gameEnd=1;
 	
@@ -64,13 +65,13 @@ int main(void) {
 	{
 		gameEnd*=dollar[i];
 	} 
-	//´©±º°¡ÀÇ ÀÚº»ÀÌ 0ÀÌ µÇ¸é gameEnd=0  
+	//ëˆ„êµ°ê°€ì˜ ìë³¸ì´ 0ì´ ë˜ë©´ gameEnd=0  
 	 
 	round++;
 	
-	} while (gameEnd!=0 && pullCard()!=0);  //Ä«µå ´Ù½áµµ ³¡  
+	} while (gameEnd!=0 && pullCard()!=0);  //ì¹´ë“œ ë‹¤ì¨ë„ ë  
 	
-	 //°ÔÀÓÁ¾·á Àü±îÁö ¹İº¹ÇÔ  
+	 //ê²Œì„ì¢…ë£Œ ì „ê¹Œì§€ ë°˜ë³µí•¨  
 	
 	
 	printf("Game End!\n");
@@ -86,18 +87,18 @@ int main(void) {
 	return 0;
 }
 
-void play(){ //°ÔÀÓ ½ÃÀÛ  
+void play(){ //ê²Œì„ ì‹œì‘  
 	
 	printf("\n--------------------\n-------------Round %d------------------\n------",round);
-	betDollar(); //Ä«µå¹èÆÃ 
-	offerCards(); //Ä«µå ¹è 
+	betDollar(); //ì¹´ë“œë°°íŒ… 
+	offerCards(); //ì¹´ë“œ ë°° 
 	printCardInitialStatus(); //print
 	
 	printf("\n-------------GAME START--------------\n");
 	
 	int my_sum;
 	
-	my_sum = my_turn(); //my turn ÀÇ return °ªÀ» »õ·Î Á¤ÀÇ  
+	my_sum = my_turn(); //my turn ì˜ return ê°’ì„ ìƒˆë¡œ ì •ì˜  
 	
 	int player=1;
 	
@@ -130,14 +131,14 @@ void play(){ //°ÔÀÓ ½ÃÀÛ
 	{
 		printf("BLACK JACK WIN!");
 		dollar[0]+=2*bet[0];
-		printf("----->$%d",dollar[0]);  //ºí·¢ÀèÀÎ °æ¿ì ¹èÆÃ±İ¾×ÀÇ 2¹è¸¦ ¹Ù·Î ¹ŞÀ½  
+		printf("----->$%d",dollar[0]);  //ë¸”ë™ì­ì¸ ê²½ìš° ë°°íŒ…ê¸ˆì•¡ì˜ 2ë°°ë¥¼ ë°”ë¡œ ë°›ìŒ  
 	}
 	else if (my_sum==21)
 	{	
 		printf("You Win!\n");
 		printf("(Sum : 21)");
 		dollar[0]+=bet[0];
-		printf("----->$%d",dollar[0]);  //±× µÚ¿¡ Ä«µå¸¦ ¹Ş¾Æ¼­ 21¸¸µå´Â °æ¿ì  
+		printf("----->$%d",dollar[0]);  //ê·¸ ë’¤ì— ì¹´ë“œë¥¼ ë°›ì•„ì„œ 21ë§Œë“œëŠ” ê²½ìš°  
 	}
 
 	else if(my_sum>21)
@@ -148,12 +149,12 @@ void play(){ //°ÔÀÓ ½ÃÀÛ
 			printf("----->$%d",dollar[0]);
 		}
 		
-		else if (dealer_sum>21)//³»°¡ burst°¡ ¾Æ´Ï°í blackjackµµ ¾Æ´Ñ°æ¿ì  
+		else if (dealer_sum>21)//ë‚´ê°€ burstê°€ ì•„ë‹ˆê³  blackjackë„ ì•„ë‹Œê²½ìš°  
 		{
 			printf("You Win!"); 
 			printf("(Sum : %d)",my_sum);
 			dollar[0]+=bet[0];
-			printf("------->%d",dollar[0]);  //µô·¯°¡ burstµÇ¸é ÇÃ·¹ÀÌ¾î°¡ ¹Ù·Î ÀÌ±è  
+			printf("------->%d",dollar[0]);  //ë”œëŸ¬ê°€ burstë˜ë©´ í”Œë ˆì´ì–´ê°€ ë°”ë¡œ ì´ê¹€  
 		}
 		
 		else if (my_sum<21 && dealer_sum>my_sum)
@@ -161,19 +162,19 @@ void play(){ //°ÔÀÓ ½ÃÀÛ
 			printf("You Lose!");
 			dollar[0]-=bet[0];
 			printf("(Sum : %d)",my_sum);
-			printf("------->%d",dollar[0]); //µô·¯°¡ ³»Ä«µåÇÕº¸´Ù Å« °æ¿ì
+			printf("------->%d",dollar[0]); //ë”œëŸ¬ê°€ ë‚´ì¹´ë“œí•©ë³´ë‹¤ í° ê²½ìš°
 		}
 			
 		else
 	   	{   printf("You Win!");
 			printf("(Sum : %d)",my_sum);
 			dollar[0]+=bet[0];
-			printf("----->$%d",dollar[0]); //±× ¿ÜÀÇ  °æ¿ì¿£ ³»°¡ ÀÌ±è  
+			printf("----->$%d",dollar[0]); //ê·¸ ì™¸ì˜  ê²½ìš°ì—” ë‚´ê°€ ì´ê¹€  
 		}
 			
 	
 	
-	for (player=1;player<n_user;player++){  //¶È°°ÀÌ ÇÃ·¹ÀÌ¾îÀÇ °æ¿ì  
+	for (player=1;player<n_user;player++){  //ë˜‘ê°™ì´ í”Œë ˆì´ì–´ì˜ ê²½ìš°  
 		
 	printf("\n---->player %d result : ",player);
 		
@@ -226,8 +227,8 @@ void play(){ //°ÔÀÓ ½ÃÀÛ
 		
 	}
 }
-int pullCard(void){ //Ä«µå ÇÑÀå¾¿ ²¨³»±â 
-//cardtray[0],cardtray[1]..¼ø¼­´ë·Î Ãâ·Â  
+int pullCard(void){ //ì¹´ë“œ í•œì¥ì”© êº¼ë‚´ê¸° 
+//cardtray[0],cardtray[1]..ìˆœì„œëŒ€ë¡œ ì¶œë ¥  
 	
 	static int j=0;
 	
@@ -243,7 +244,7 @@ int pullCard(void){ //Ä«µå ÇÑÀå¾¿ ²¨³»±â
 		
 }
 
-void printUserCardStatus(int user, int cardcnt) { //Ä«µå ¹ŞÀ»¶§¸¶´Ù Ä«µå Ãâ·Â  
+void printUserCardStatus(int user, int cardcnt) { //ì¹´ë“œ ë°›ì„ë•Œë§ˆë‹¤ ì¹´ë“œ ì¶œë ¥  
 
 	int i;
 	
@@ -279,14 +280,14 @@ int k,rnd,temp;
 		temp = CardTray[k];
 		CardTray[k]=CardTray[rnd];
 		CardTray[rnd]=temp;
-	}	 //Ä«µå shuffle  
+	}	 //ì¹´ë“œ shuffle  
 	
 	printf("card is mixed and put into the tray");
 	
 }
 
 
-void printCard(int cardnum) {  //Ä«µå ÇÁ¸°Æ®  
+void printCard(int cardnum) {  //ì¹´ë“œ í”„ë¦°íŠ¸  
 	
 	if (cardnum/13==0)
 	
@@ -368,7 +369,7 @@ void printCard(int cardnum) {  //Ä«µå ÇÁ¸°Æ®
 }
 
 
-int calcStepResult(int user, int cardcnt){ //°¡Áö°í ÀÖ´Â Ä«µåÀÇ ÇÕÀ» °è»êÇÔ  
+int calcStepResult(int user, int cardcnt){ //ê°€ì§€ê³  ìˆëŠ” ì¹´ë“œì˜ í•©ì„ ê³„ì‚°í•¨  
 		
 	int cardSum[N_MAX_USER];
 	
@@ -376,7 +377,7 @@ int calcStepResult(int user, int cardcnt){ //°¡Áö°í ÀÖ´Â Ä«µåÀÇ ÇÕÀ» °è»êÇÔ
 	
 	  for  (i=0;i<cardcnt;i++){
 	
-	 sum+=getCardNum(cardhold[user][i]); //ÀÏ´Ü A´Â 11·Î °íÁ¤  
+	 sum+=getCardNum(cardhold[user][i]); //ì¼ë‹¨ AëŠ” 11ë¡œ ê³ ì •  
 	}
 	cardSum[user]=sum;
 	
@@ -469,7 +470,7 @@ int configUser(void){
 	
 	scanf("%d",&n_user);
 	
-	} while(n_user>5); //5º¸´Ù Å« °æ¿ì n_user°ªÀ» ´Ù½Ã ¹ŞÀ½  
+	} while(n_user>5); //5ë³´ë‹¤ í° ê²½ìš° n_userê°’ì„ ë‹¤ì‹œ ë°›ìŒ  
 
 	return n_user;
 }
@@ -484,14 +485,14 @@ int betDollar(void){
 		
 	scanf("%d",&bet[0]);
 
-	}while(bet[0]>dollar[0]); //°¡Áøµ·º¸´Ù Àû°Ô ¹èÆÃÇÒ ¼ö ÀÖÀ½// 
+	}while(bet[0]>dollar[0]); //ê°€ì§„ëˆë³´ë‹¤ ì ê²Œ ë°°íŒ…í•  ìˆ˜ ìˆìŒ// 
 		
 	printf("You bets $%d (out of $%d)\n",bet[0],dollar[0]);
 	int i;
 	
 	for (i=1;i<n_user;i++)
 	{
-		bet[i]= (rand()%dollar[i])+1;  //¹èÆÃÇÒ¶§ °¡Áö°í ÀÖ´Â µ· ÀÌ³»ÀÇ ·£´ı°ªÀ» ¹èÆÃ  
+		bet[i]= (rand()%dollar[i])+1;  //ë°°íŒ…í• ë•Œ ê°€ì§€ê³  ìˆëŠ” ëˆ ì´ë‚´ì˜ ëœë¤ê°’ì„ ë°°íŒ…  
 		printf("player %d bets $%d (out of $%d)\n",i,bet[i],dollar[i]);
 			
 	}
@@ -517,7 +518,7 @@ void offerCards(void) {
 }
 
 
-void printCardInitialStatus(void) { //Ã³À½ ¹ŞÀº Ä«µå 2°³¸¸ ÇÁ¸°Æ®  
+void printCardInitialStatus(void) { //ì²˜ìŒ ë°›ì€ ì¹´ë“œ 2ê°œë§Œ í”„ë¦°íŠ¸  
 		
 		int i;
 		printf("---------card offering---------");
@@ -536,8 +537,8 @@ void printCardInitialStatus(void) { //Ã³À½ ¹ŞÀº Ä«µå 2°³¸¸ ÇÁ¸°Æ®
 			printf("->player %d cardsum : %d\n",i,calcStepResult(i,2));
 			printf("\n");
 		}
-		printf("\n---server  :  X ");  //µô·¯ÀÇ Ã¹Ä«µå´Â ¿ÀÇÂÇÏÁö ¾ÊÀ½  
-		printCard(cardhold[n_user][1]);	//µÎ¹øÂ° Ä«µå¸¸ ¿ÀÇÂÇÔ  
+		printf("\n---server  :  X ");  //ë”œëŸ¬ì˜ ì²«ì¹´ë“œëŠ” ì˜¤í”ˆí•˜ì§€ ì•ŠìŒ  
+		printCard(cardhold[n_user][1]);	//ë‘ë²ˆì§¸ ì¹´ë“œë§Œ ì˜¤í”ˆí•¨  
 			
 	 
 }
@@ -548,19 +549,19 @@ int my_turn(void){
 
 	printf("\n---------------my Turn-----------------\n");
 	printUserCardStatus (0,2);
-	printf("Your Card Sum : %d\n",calcStepResult(0,2)); //Ã³À½ 2°³ ¹Ş¾ÒÀ»¶§ ÇÁ¸°Æ®  
+	printf("Your Card Sum : %d\n",calcStepResult(0,2)); //ì²˜ìŒ 2ê°œ ë°›ì•˜ì„ë•Œ í”„ë¦°íŠ¸  
 	
 	if (calcStepResult(0,2)==21)
 	{
 		printf("BLACKJACK!\n");
-		return calcStepResult(0,2);  //ºí·¢ÀèÀÌ¸é ¹Ù·Î ³¡ 
+		return calcStepResult(0,2);  //ë¸”ë™ì­ì´ë©´ ë°”ë¡œ ë 
 	}
 	
 	else {
 	int i=0;
-	int cardcnt=2; //2Àåº¸´Ù Ä«µå¸¦ ´õ ¹Ş´Â °æ¿ì  
+	int cardcnt=2; //2ì¥ë³´ë‹¤ ì¹´ë“œë¥¼ ë” ë°›ëŠ” ê²½ìš°  
 	
-	for (i=0; i<8; i++) //10Àå±îÁö ¹ŞÀ½  
+	for (i=0; i<8; i++) //10ì¥ê¹Œì§€ ë°›ìŒ  
 	{
 		int action;
 		
@@ -568,44 +569,44 @@ int my_turn(void){
 		
 		do{
 			scanf("%d",&action);
-		} while (action!=1 && action!=0); //ÀÏ´Ü ÇÑ¹ø ½ÇÇàÇÔ  
+		} while (action!=1 && action!=0); //ì¼ë‹¨ í•œë²ˆ ì‹¤í–‰í•¨  
 		
 	
-		if (action==1) //Ä«µå¸¦ ´õ ¹Ş´Â°æ¿ì  
+		if (action==1) //ì¹´ë“œë¥¼ ë” ë°›ëŠ”ê²½ìš°  
 		{
 			printf("GO!\n");  
 			cardhold[0][i+2]=pullCard();
-			cardcnt++; //pullCardÇÒ¶§¸¶´Ù Ä«µå¼ö°¡ ´õÇØÁü  
-			printUserCardStatus(0,cardcnt); //Ãâ·Â°è¼ÓÇÔ
+			cardcnt++; //pullCardí• ë•Œë§ˆë‹¤ ì¹´ë“œìˆ˜ê°€ ë”í•´ì§  
+			printUserCardStatus(0,cardcnt); //ì¶œë ¥ê³„ì†í•¨
 			
 			if (calcStepResult(0,cardcnt) > 21) 
 			{
 				printf("Your Card Sum : %d\n",calcStepResult(0,cardcnt));
 				printf("BURST!\n");
-				return calcStepResult(0,cardcnt); //21º¸´Ù ÃÊ°úÇÏ¸é ¹Ù·Î ³¡³²  
+				return calcStepResult(0,cardcnt); //21ë³´ë‹¤ ì´ˆê³¼í•˜ë©´ ë°”ë¡œ ëë‚¨  
 			}
 			else if (calcStepResult(0,cardcnt) == 21)
 			{
 				printf("Your Card Sum : %d\n",calcStepResult(0,cardcnt));
-				return calcStepResult(0,cardcnt); //21ÀÌ µÇ¸é ¹Ù·Î ÀÌ±â°í ³¡  
+				return calcStepResult(0,cardcnt); //21ì´ ë˜ë©´ ë°”ë¡œ ì´ê¸°ê³  ë  
 			}		
 			else 
 		
-			printf("Your Card Sum : %d\n",calcStepResult(0,cardcnt)); //Áß°£¿¡ ¹ŞÀ»¶§¸¶´Ù Ä«µå ´õÇØÁö´Â°Å º¸¿©ÁÜ  
+			printf("Your Card Sum : %d\n",calcStepResult(0,cardcnt)); //ì¤‘ê°„ì— ë°›ì„ë•Œë§ˆë‹¤ ì¹´ë“œ ë”í•´ì§€ëŠ”ê±° ë³´ì—¬ì¤Œ  
 			
 		}
-		else if (action==0) //¾È¹Ş´Â °æ¿ì  
+		else if (action==0) //ì•ˆë°›ëŠ” ê²½ìš°  
 		{
 			printf("STAY!\n");
 			printf("Your Card Sum : %d\n",calcStepResult(0,cardcnt));
-			return calcStepResult(0,cardcnt); //Å»Ãâ  
+			return calcStepResult(0,cardcnt); //íƒˆì¶œ  
 		
 		}
 	}
 }
 	
 }
-int player_turn(int player){  //ÇÃ·¹ÀÌ¾îÀÇ °æ¿ì¿¡µµ °ÅÀÇ µ¿ÀÏÇÔ  
+int player_turn(int player){  //í”Œë ˆì´ì–´ì˜ ê²½ìš°ì—ë„ ê±°ì˜ ë™ì¼í•¨  
 	
 	int i=0;
 	int cardcnt=2;
@@ -620,7 +621,7 @@ int player_turn(int player){  //ÇÃ·¹ÀÌ¾îÀÇ °æ¿ì¿¡µµ °ÅÀÇ µ¿ÀÏÇÔ
 	for (i=0; i<8; i++)
 	{
 	
-		if (calcStepResult(player,cardcnt)<17) //17º¸´Ù ÀÛÀ¸¸é ÀÚµ¿À¸·Î ´õ ¹Ş À½ //
+		if (calcStepResult(player,cardcnt)<17) //17ë³´ë‹¤ ì‘ìœ¼ë©´ ìë™ìœ¼ë¡œ ë” ë°› ìŒ //
 		{
 			printf("GO!\n");
 			cardhold[player][i+2]=pullCard();
@@ -645,7 +646,7 @@ int player_turn(int player){  //ÇÃ·¹ÀÌ¾îÀÇ °æ¿ì¿¡µµ °ÅÀÇ µ¿ÀÏÇÔ
 			printf("Sum of player %d's cards now:%d\n\n",player,calcStepResult(player,cardcnt));	
 			
 	}
-		else if (calcStepResult(player,cardcnt)>=17) // 17º¸´Ù Å©°Å³ª °°À¸¸é action==0 
+		else if (calcStepResult(player,cardcnt)>=17) // 17ë³´ë‹¤ í¬ê±°ë‚˜ ê°™ìœ¼ë©´ action==0 
 		{	
 			printf("STAY!\n");
 
@@ -656,7 +657,7 @@ int player_turn(int player){  //ÇÃ·¹ÀÌ¾îÀÇ °æ¿ì¿¡µµ °ÅÀÇ µ¿ÀÏÇÔ
   }
 }
 
-int dealer_turn(){ //ÇÃ·¹ÀÌ¾î ÅÏ°ú ¶È°°À½  
+int dealer_turn(){ //í”Œë ˆì´ì–´ í„´ê³¼ ë˜‘ê°™ìŒ  
 	
 	
 	int i=0;
