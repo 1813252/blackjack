@@ -46,6 +46,7 @@ int main(void) {
 		
 	mixCardTray();
 	
+	
 	for (i=0;i<n_user;i++)
 	{		
 		dollar[i]=50;
@@ -68,15 +69,17 @@ int main(void) {
 	 
 	round++;
 	
-	} while (gameEnd!=0 );  //게임종료 전까지 반복함  
+	} while (gameEnd!=0 && pullCard()!=0);  //카드 다써도 끝  
+	
+	 //게임종료 전까지 반복함  
 	
 	
 	printf("Game End!\n");
-	printf("Your money : %d",dollar[0]);
+	printf("\nYour money : %d\n",dollar[0]);
 	
 	for(i=1;i<n_user;i++){
 		
-		printf("player %d money : %d",i,dollar[i]);
+		printf("player %d money : %d\n",i,dollar[i]);
 		
 	}
 	
@@ -231,9 +234,13 @@ int pullCard(void){ //카드 한장씩 꺼내기
 	
 	j++;	
 		
-	if (j<=N_CARDSET*52)
+	if (j<N_CARDSET*52)
 	
 	return CardTray[j];
+	
+	else if (j>=N_CARDSET*52)
+	
+	return 0;
 		
 }
 
